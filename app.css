@@ -5,3 +5,8 @@
 .year, .doi {
 	white-space: nowrap;
 }
+
+th, td {
+	vertical-align: top;
+	text-align: left;
+}
