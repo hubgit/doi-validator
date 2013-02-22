@@ -108,7 +108,8 @@
 				
 				var item = $("<tr/>");
 
-				$("<td/>").addClass("doi").text(data.doi).appendTo(item);
+				var link = $("<a/>", { href: "http://dx.doi.org/" + data.doi, target: "_blank" }).text(data.doi);
+				$("<td/>").addClass("doi").append(link).appendTo(item);
 
 				var year = $("<div/>").text(data.year);
 				$("<td/>").addClass("year").append(year).appendTo(item);
