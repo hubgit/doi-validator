@@ -6,7 +6,21 @@
 	white-space: nowrap;
 }
 
+.doi {
+	max-width: 20%;
+	overflow-x: auto;
+	text-overflow: ellipsis;
+}
+
+table {
+	width: 100%;
+}
+
 th, td {
 	vertical-align: top;
 	text-align: left;
+}
+
+tr:nth-of-type(even) {
+	background-color: #eee;
 }
