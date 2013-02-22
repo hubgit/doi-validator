@@ -12,8 +12,13 @@
 	text-overflow: ellipsis;
 }
 
+a {
+	text-decoration: none;
+}
+
 table {
 	width: 100%;
+	font-family: sans-serif;
 }
 
 th, td {
