@@ -34,7 +34,7 @@
 
 				var existing = item.find(".year div");
 				if (existing.text() != date) {
-					existing.addClass("error");
+					year.addClass("error");
 				}
 
 				item.find(".year").append(year);
@@ -44,7 +44,7 @@
 
 				var existing = item.find(".title div");
 				if (existing.text().toLowerCase() != article["dc:title"].toLowerCase()) {
-					existing.addClass("error");
+					title.addClass("error");
 				}
 
 				item.find(".title").append(title);
@@ -54,7 +54,7 @@
 
 				var existing = item.find(".volume div");
 				if (existing.text() != article["prism:volume"]) {
-					existing.addClass("error");
+					volume.addClass("error");
 				}
 
 				item.find(".volume").append(volume);
@@ -101,10 +101,15 @@
 				}
 
 				data.doi = doc.evaluate('pub-id[@pub-id-type="doi"]', citation, null, XPathResult.STRING_TYPE, null).stringValue;
+				data.year = doc.evaluate('year/@iso-8601-date', citation, null, XPathResult.STRING_TYPE, null).stringValue;
 
 				for (var j = 0; j < citation.childNodes.length; j++) {
 					var propertyNode = citation.childNodes[j];
-					data[propertyNode.nodeName] = propertyNode.textContent;
+					var propertyName = propertyNode.nodeName;
+
+					if (!data[propertyName]) {
+						data[propertyName] = propertyNode.textContent;
+					}
 				}
 
 				var item = $("<tr/>");
