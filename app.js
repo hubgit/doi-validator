@@ -11,6 +11,7 @@
 	$("body").append(items);
 
 	var head = $("<tr/>");
+	$("<th/>").text("ID").appendTo(head);
 	$("<th/>").text("DOI").appendTo(head);
 	$("<th/>").text("Year").appendTo(head);
 	$("<th/>").text("Vol").appendTo(head);
@@ -37,7 +38,7 @@
 				}
 
 				item.find(".year").append(year);
-						
+
 				// title
 				var title = $("<div/>").text(article["dc:title"]);
 
@@ -90,23 +91,25 @@
 		url: "https://peerj.com/articles/" + id + ".xml",
 		dataType: "xml",
 		success: function(doc) {
-			var nodes = doc.evaluate('//ref-list/ref/element-citation/pub-id[@pub-id-type="doi"]', doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
+			var nodes = doc.evaluate('//ref-list/ref/element-citation', doc, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
 			for (var i = 0; i < nodes.snapshotLength; i++) {
-				var node = nodes.snapshotItem(i);
+				var citation = nodes.snapshotItem(i);
 
 				var data = {
-					doi: node.textContent
+					id: citation.parentNode.getAttribute("id"),
 				}
-				
-				var citation = node.parentNode;
+
+				data.doi = doc.evaluate('pub-id[@pub-id-type="doi"]', citation, null, XPathResult.STRING_TYPE, null).stringValue;
 
 				for (var j = 0; j < citation.childNodes.length; j++) {
 					var propertyNode = citation.childNodes[j];
 					data[propertyNode.nodeName] = propertyNode.textContent;
 				}
-				
+
 				var item = $("<tr/>");
+
+				$("<td/>").addClass("id").text(data.id).appendTo(item);
 
 				var link = $("<a/>", { href: "http://dx.doi.org/" + data.doi, target: "_blank" }).text(data.doi);
 				$("<td/>").addClass("doi").append(link).appendTo(item);
@@ -128,7 +131,9 @@
 
 				items.append(item);
 
-				fetchCrossRefData(data.doi, item);
+				if (data.doi) {
+					fetchCrossRefData(data.doi, item);
+				}
 			}
 		}
 	});
